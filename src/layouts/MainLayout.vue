@@ -13,7 +13,7 @@
         </main>
 
         <div class="fixed-action-btn">
-            <a class="btn-floating btn-large blue" href="#">
+            <a class="btn-floating btn-large blue" href="/record">
                 <i class="large material-icons">add</i>
             </a>
         </div>
