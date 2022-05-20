@@ -5,12 +5,14 @@
                 <a class="dropdown-trigger" @click.prevent="$emit('openSideBar')">
                     <i class="material-icons black-text">dehaze</i>
                 </a>
-                <span class="black-text">12.12.12</span>
+                <span class="black-text">
+                    <Data/>
+                </span>
             </div>
 
             <ul class="right hide-on-small-and-down">
                 <li>
-                    <a
+                    <a      ref="dropdown"
                             class="dropdown-trigger black-text"
                             href="#"
                             data-target="dropdown"
@@ -18,18 +20,19 @@
                         USER NAME
                         <i class="material-icons right">arrow_drop_down</i>
                     </a>
-
                     <ul id='dropdown' class='dropdown-content'>
                         <li>
-                            <a href="#" class="black-text">
-                                <i class="material-icons">account_circle</i>Профиль
-                            </a>
+                            <router-link :to="{name: 'Profile'}"
+                                         class="black-text">
+                                <i class="material-icons">account_circle</i>Profile
+                            </router-link>
                         </li>
                         <li class="divider" tabindex="-1"></li>
                         <li>
-                            <a href="#" class="black-text">
-                                <i class="material-icons">assignment_return</i>Выйти
-                            </a>
+                            <router-link :to="{name: 'Login'}"
+                                         class="black-text">
+                                <i class="material-icons">assignment_return</i>Exit
+                            </router-link>
                         </li>
                     </ul>
                 </li>
@@ -39,9 +42,30 @@
 </template>
 
 <script>
+    import M from 'materialize-css'
+    import Data from "./Data";
+
     export default {
         name: "NavBar",
-        emits: ['openSideBar']
+        components:{Data},
+        emits: ['openSideBar'],
+        data(){
+            return{
+                dropdown: null
+            }
+        },
+        mounted() {
+            this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
+                constrainWidth: true,
+                inDuration: 350,
+                alignment: 'right'
+            })
+        },
+        beforeUnmount() {
+            if (this.dropdown.destroy){
+                this.dropdown.destroy
+            }
+        }
     }
 </script>
 

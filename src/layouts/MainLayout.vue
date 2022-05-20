@@ -2,21 +2,20 @@
     <div class="app-main-layout">
 
         <NavBar @openSideBar="openSideBar"/>
-        <Sidebar :isSidebarOpen="isSidebarOpen"/>
+        <Sidebar
+                :isSidebarOpen="isSidebarOpen"
+                @openSideBar="openSideBar"
+        />
 
         <main class="app-content"
-        :class="{'full': isSidebarOpen}"
+        :class="{'full': isSidebarOpen || this.innerWidth < 768}"
         >
             <div class="app-page">
                 <router-view/>
             </div>
         </main>
 
-        <div class="fixed-action-btn">
-            <a class="btn-floating btn-large blue" href="/record">
-                <i class="large material-icons">add</i>
-            </a>
-        </div>
+        <RecordLink/>
 
     </div>
 </template>
@@ -25,14 +24,18 @@
 <script>
     import NavBar from "../components/app/NavBar";
     import Sidebar from "../components/app/Sidebar";
+    import RecordLink from "../components/app/RecordLink";
+
     export default {
         name: 'MainLayout',
         components:{
             NavBar,
-            Sidebar
+            Sidebar,
+            RecordLink
         },
         data(){
             return{
+                innerWidth: window.innerWidth,
                 isSidebarOpen: false
             }
         },
