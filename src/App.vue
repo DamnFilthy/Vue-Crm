@@ -7,12 +7,11 @@
 <script>
  import EmptyLayout from './layouts/EmptyLayout'
  import MainLayout from './layouts/MainLayout'
-
  export default {
   computed: {
    // eslint-disable-next-line vue/return-in-computed-property
    layout() {
-    return (this.$route.meta.layout || 'empty') + '-layout'
+    return (this.$route.meta.layout || 'EmptyLayout')
    }
   },
   components: {EmptyLayout, MainLayout}

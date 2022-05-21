@@ -14,7 +14,7 @@
           <label for="email">Email</label>
           <small
             class="helper-text invalid"
-            v-show="
+            v-if="
               this.email.length === 0 &&
               v$.email.email.$response &&
               v$.email.$error
@@ -39,7 +39,7 @@
             >Пароль обязательное поле для заполнения
           </small>
           <small
-            v-show="this.password.length > 0 && v$.password.$invalid"
+            v-if="this.password.length > 0 && v$.password.$invalid"
             class="helper-text invalid"
           >
             Пароль должен быть не менее
@@ -71,6 +71,7 @@
 <script>
 import useVuelidate from '@vuelidate/core'
 import {required, email, minLength} from '@vuelidate/validators'
+import M from 'materialize-css'
 
 export default {
   setup() {
@@ -79,11 +80,27 @@ export default {
     }
   },
   name: 'Login',
+  props:{
+    logout: {
+      type: Boolean,
+      required: false
+    },
+    message: {
+      type: String,
+      required: false
+    },
+  },
   data() {
     return {
       email: '',
       password: '',
       isLoading: false,
+    }
+  },
+  mounted() {
+    console.log(this.logout, this.message)
+    if (this.logout && this.message !== undefined){
+      M.toast({html: this.message})
     }
   },
   methods: {

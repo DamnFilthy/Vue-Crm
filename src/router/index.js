@@ -7,7 +7,7 @@ export const routes = [
     component: () => import('../views/Home.vue'),
     meta: {
       title: 'Главная страница',
-      layout: 'main',
+      layout: 'MainLayout',
     },
   },
   {
@@ -16,7 +16,7 @@ export const routes = [
     component: () => import('../views/Categories.vue'),
     meta: {
       title: 'Категории',
-      layout: 'main',
+      layout: 'MainLayout',
     },
   },
   {
@@ -25,7 +25,7 @@ export const routes = [
     component: () => import('../views/DetailRecord.vue'),
     meta: {
       title: 'Детали заказа',
-      layout: 'main',
+      layout: 'MainLayout',
     },
   },
   {
@@ -34,7 +34,7 @@ export const routes = [
     component: () => import('../views/History.vue'),
     meta: {
       title: 'История',
-      layout: 'main',
+      layout: 'MainLayout',
     },
   },
   {
@@ -43,7 +43,7 @@ export const routes = [
     component: () => import('../views/Planning.vue'),
     meta: {
       title: 'Планирование',
-      layout: 'main',
+      layout: 'MainLayout',
     },
   },
   {
@@ -52,7 +52,7 @@ export const routes = [
     component: () => import('../views/Profile.vue'),
     meta: {
       title: 'Профиль',
-      layout: 'main',
+      layout: 'MainLayout',
     },
   },
   {
@@ -61,16 +61,17 @@ export const routes = [
     component: () => import('../views/Record.vue'),
     meta: {
       title: 'Новая запись',
-      layout: 'main',
+      layout: 'MainLayout',
     },
   },
   {
     path: '/login',
     name: 'Login',
+    props: true,
     component: () => import('../views/Login.vue'),
     meta: {
       title: 'Вход',
-      layout: 'empty',
+      layout: 'EmptyLayout',
     },
   },
   {
@@ -79,7 +80,7 @@ export const routes = [
     component: () => import('../views/Register.vue'),
     meta: {
       title: 'Регистрация',
-      layout: 'empty',
+      layout: 'EmptyLayout',
     },
   },
 ]

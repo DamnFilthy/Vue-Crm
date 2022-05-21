@@ -29,7 +29,10 @@
             </li>
             <li class="divider" tabindex="-1"></li>
             <li>
-              <router-link :to="{name: 'Login'}" class="black-text">
+              <router-link
+                :to="{name: 'Login', params: {logout: true, message: 'Вы вышли из системы'}}"
+                class="black-text"
+              >
                 <i class="material-icons">assignment_return</i>Exit
               </router-link>
             </li>
