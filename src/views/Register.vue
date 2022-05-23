@@ -39,8 +39,8 @@
         <div class="input-field">
           <input
                   v-model.trim="password"
-                  id="password"
                   type="password"
+                  autocomplete="on"
                   :class="{invalid: v$.password.$errors.length}"
           />
           <label for="password">Пароль</label>
@@ -61,8 +61,8 @@
         <div class="input-field">
           <input
                   v-model.trim="confirmPassword"
-                  id="password"
                   type="password"
+                  autocomplete="on"
                   :class="{invalid: v$.confirmPassword.$errors.length}"
           />
           <label for="password">Пароль</label>

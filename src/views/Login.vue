@@ -1,5 +1,7 @@
 <template>
-  <div v-if="isLoading">Loading...</div>
+  <div class="loading-block" v-if="isLoading">
+    <AtomSpinner :size="150" :color="'#ffa726'"/>
+  </div>
   <div v-else-if="!isLoading">
     <form class="card auth-card" @submit.prevent="onSubmit">
       <div class="card-content">
@@ -28,11 +30,11 @@
         <div class="input-field">
           <input
             v-model.trim="password"
-            id="password"
             type="password"
+            autocomplete="on"
             :class="{invalid: v$.password.$errors.length}"
           />
-          <label for="password">Пароль</label>
+          <label>Пароль</label>
           <small
             v-show="this.password.length === 0 && v$.password.$error"
             class="helper-text invalid"
@@ -49,6 +51,12 @@
         </div>
       </div>
       <div class="card-action">
+        <div v-if="loginErrors">
+          <span v-for="(error, index) in this.loginErrors" :key="index"
+                class="helper-text invalid">
+            {{ error }}
+          </span>
+        </div>
         <div>
           <button
             class="btn waves-effect waves-light auth-submit"
@@ -72,6 +80,7 @@
 import useVuelidate from '@vuelidate/core'
 import {required, email, minLength} from '@vuelidate/validators'
 import M from 'materialize-css'
+import {AtomSpinner} from 'epic-spinners'
 
 export default {
   setup() {
@@ -79,15 +88,18 @@ export default {
       v$: useVuelidate(),
     }
   },
+  components: {
+    AtomSpinner,
+  },
   name: 'Login',
-  props:{
+  props: {
     logout: {
       type: Boolean,
-      required: false
+      required: false,
     },
     message: {
       type: String,
-      required: false
+      required: false,
     },
   },
   data() {
@@ -95,32 +107,37 @@ export default {
       email: '',
       password: '',
       isLoading: false,
+      loginErrors: null,
     }
   },
   mounted() {
     console.log(this.logout, this.message)
-    if (this.logout && this.message !== undefined){
+    if (this.logout && this.message !== undefined) {
       M.toast({html: this.message})
     }
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (this.v$.$invalid) {
         this.v$.$touch()
       }
       if (!this.v$.$invalid) {
         this.isLoading = true
 
-        setTimeout(() => {
-          this.isLoading = false
-          this.$router.push({name: 'Home'})
-        }, 2000)
-
         const formData = {
           email: this.email,
           password: this.password,
         }
-        console.log(formData)
+
+        try {
+          await this.$store.dispatch('login', formData)
+          await this.$router.push({name: 'Home'})
+        } catch (error) {
+          this.email = ''
+          this.password = ''
+          this.loginErrors = error
+          this.isLoading = false
+        }
       }
     },
   },
@@ -137,4 +154,8 @@ export default {
 .input-field {
   margin-bottom: 30px;
 }
+  .loading-block{
+    position: absolute;
+    top: calc(50% - 150px);
+  }
 </style>
