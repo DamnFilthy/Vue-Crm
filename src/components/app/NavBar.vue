@@ -2,7 +2,7 @@
   <nav class="navbar orange lighten-1">
     <div class="nav-wrapper">
       <div class="navbar-left">
-        <a class="dropdown-trigger" @click.prevent="$emit('openSideBar')">
+        <a class="dropdown-trigger mobile-menu-burger" @click.prevent="$emit('openSideBar')">
           <i class="material-icons black-text">dehaze</i>
         </a>
         <span class="black-text">
@@ -10,7 +10,7 @@
         </span>
       </div>
 
-      <ul class="right hide-on-small-and-down">
+      <ul class="right">
         <li>
           <a
             ref="dropdown"
@@ -18,13 +18,13 @@
             href="#"
             data-target="dropdown"
           >
-            USER NAME
+            <span class="mobile-hide-name">Имя пользователя</span>
             <i class="material-icons right">arrow_drop_down</i>
           </a>
           <ul id="dropdown" class="dropdown-content">
             <li>
               <router-link :to="{name: 'Profile'}" class="black-text">
-                <i class="material-icons">account_circle</i>Profile
+                <i class="material-icons">account_circle</i>Профиль
               </router-link>
             </li>
             <li class="divider" tabindex="-1"></li>
@@ -33,7 +33,7 @@
                 :to="{name: 'Login', params: {logout: true, message: 'Вы вышли из системы'}}"
                 class="black-text"
               >
-                <i class="material-icons">assignment_return</i>Exit
+                <i class="material-icons">assignment_return</i>Выйти
               </router-link>
             </li>
           </ul>
@@ -71,4 +71,15 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  @media (min-width: 769px){
+    .mobile-menu-burger{
+      display: none;
+    }
+  }
+  @media (max-width: 435px){
+    .mobile-hide-name{
+      display: none;
+    }
+  }
+</style>

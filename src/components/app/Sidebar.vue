@@ -5,10 +5,10 @@
         v-if="route.name !== 'Register' && route.name !== 'Login'"
         :to="{name: route.name}"
         exact
-        class="waves-effect waves-orange pointer"
+        class="waves-effect waves-light"
         @click.prevent="$emit('openSideBar')"
       >
-        {{ route.name }}
+        {{ route.translate }}
       </router-link>
     </li>
   </ul>

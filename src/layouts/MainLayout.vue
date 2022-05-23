@@ -36,7 +36,9 @@ export default {
   },
   methods: {
     openSideBar() {
-      this.isSidebarOpen = !this.isSidebarOpen
+      if (this.innerWidth < 769){
+        this.isSidebarOpen = !this.isSidebarOpen
+      }
     },
   },
 }
