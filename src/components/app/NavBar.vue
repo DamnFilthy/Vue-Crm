@@ -2,7 +2,10 @@
   <nav class="navbar orange lighten-1">
     <div class="nav-wrapper">
       <div class="navbar-left">
-        <a class="dropdown-trigger mobile-menu-burger" @click.prevent="$emit('openSideBar')">
+        <a
+          class="dropdown-trigger mobile-menu-burger"
+          @click.prevent="$emit('openSideBar')"
+        >
           <i class="material-icons black-text">dehaze</i>
         </a>
         <span class="black-text">
@@ -30,7 +33,10 @@
             <li class="divider" tabindex="-1"></li>
             <li>
               <router-link
-                :to="{name: 'Login', params: {logout: true, message: 'Вы вышли из системы'}}"
+                :to="{
+                  name: 'Login',
+                  params: {logout: true, message: 'Вы вышли из системы'},
+                }"
                 class="black-text"
               >
                 <i class="material-icons">assignment_return</i>Выйти
@@ -72,14 +78,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @media (min-width: 769px){
-    .mobile-menu-burger{
-      display: none;
-    }
+@media (min-width: 769px) {
+  .mobile-menu-burger {
+    display: none;
   }
-  @media (max-width: 435px){
-    .mobile-hide-name{
-      display: none;
-    }
+}
+@media (max-width: 435px) {
+  .mobile-hide-name {
+    display: none;
   }
+}
 </style>
