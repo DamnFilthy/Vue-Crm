@@ -10,9 +10,11 @@ export default {
                 throw error
             }
         },
-        async logout(){
+        async logout({commit}){
             try {
                 await firebase.auth().signOut()
+                commit('clearInfo')
+                return true
             }catch (error) {
                 throw error
             }

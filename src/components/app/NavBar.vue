@@ -21,7 +21,7 @@
             href="#"
             data-target="dropdown"
           >
-            <span class="mobile-hide-name">Имя пользователя</span>
+            <span class="mobile-hide-name">{{this.userName}}</span>
             <i class="material-icons right">arrow_drop_down</i>
           </a>
           <ul id="dropdown" class="dropdown-content">
@@ -33,10 +33,7 @@
             <li class="divider" tabindex="-1"></li>
             <li>
               <router-link
-                :to="{
-                  name: 'Login',
-                  params: {logout: true, message: 'Вы вышли из системы'},
-                }"
+                :to="{name: 'Login', params:{logout:true, message:'Вы вышли из учетной записи'}}"
                 class="black-text"
               >
                 <i class="material-icons">assignment_return</i>Выйти
@@ -74,6 +71,11 @@ export default {
       this.dropdown.destroy
     }
   },
+  computed:{
+    userName(){
+      return this.$store.state.info.info.name
+    }
+  }
 }
 </script>
 

@@ -1,49 +1,73 @@
 <template>
   <div class="page-title">
+    <div :class="{shown: this.isLogin}" class="message-popup">
+      {{ this.message }}
+    </div>
     <h3>Счет</h3>
 
     <button class="btn waves-effect waves-light btn-small">
       <i class="material-icons">refresh</i>
     </button>
   </div>
-  <div class="row">
-    <div class="col s12 m6 l4">
-      <div class="card light-blue bill-card">
-        <div class="card-content white-text">
-          <span class="card-title">Счет в валюте</span>
-
-          <p class="currency-line">
-            <span>12.0 Р</span>
-          </p>
-        </div>
-      </div>
+  <div>
+    <div class="home-loader" v-if="loading">
+      <AtomSpinner :size="150" :color="'#ffa726'" />
     </div>
-
-    <div class="col s12 m6 l8">
-      <div class="card orange darken-3 bill-card">
-        <div class="card-content white-text">
-          <div class="card-header">
-            <span class="card-title">Курс валют</span>
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th>Валюта</th>
-                <th>Курс</th>
-                <th>Дата</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr>
-                <td>руб</td>
-                <td>12121</td>
-                <td>12.12.12</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <div class="row" v-else>
+      <div class="col s12 m6 l4">
+        <Bill />
+      </div>
+      <div class="col s12 m6 l8">
+        <Course />
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import Course from '../components/app/home-components/Course'
+import Bill from '../components/app/home-components/Bill'
+import {AtomSpinner} from 'epic-spinners'
+export default {
+  name: 'Home',
+  components: {
+    Course,
+    Bill,
+    AtomSpinner,
+  },
+  data() {
+    return {
+      loading: false,
+      isLogin: this.$route.params.login === 'true',
+      message: this.$route.params.message
+    }
+  },
+  async mounted() {
+    console.log(this.$route.params.message, this.isLogin)
+    setTimeout(() => (this.isLogin = false), 2000)
+    await this.$store.dispatch('fetchFixer')
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.home-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.message-popup {
+  opacity: 0;
+  transition: 0.5s ease-in-out;
+  position: absolute;
+  top: 82px;
+  right: 117px;
+  background-color: wheat;
+  padding: 15px;
+  border-radius: 4px;
+}
+.shown {
+  opacity: 1;
+}
+</style>

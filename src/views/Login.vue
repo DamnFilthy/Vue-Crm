@@ -86,24 +86,22 @@ import {required, email, minLength} from '@vuelidate/validators'
 import {AtomSpinner} from 'epic-spinners'
 
 export default {
+  name: 'Login',
+  components: {
+    AtomSpinner,
+  },
+  props: {
+    logout: {
+      type: String,
+    },
+    message: {
+      type: String,
+    },
+  },
   setup() {
     return {
       v$: useVuelidate(),
     }
-  },
-  components: {
-    AtomSpinner,
-  },
-  name: 'Login',
-  props: {
-    logout: {
-      type: String,
-      required: false,
-    },
-    message: {
-      type: String,
-      required: false,
-    },
   },
   data() {
     return {
@@ -111,14 +109,15 @@ export default {
       password: '',
       isLoading: false,
       loginErrors: null,
-      isLogout: this.logout,
+      isLogout: this.logout === 'true',
     }
   },
-  mounted() {
-    setTimeout(() => {
-      this.isLogout = false
-      console.log(this.isLogout)
-    }, 2000)
+  async mounted() {
+    setTimeout(() => (this.isLogout = false), 2000)
+
+    if (this.isLogout) {
+      await this.$store.dispatch('logout').then(console.log('logout created'))
+    }
   },
   methods: {
     async onSubmit() {
@@ -134,11 +133,15 @@ export default {
         }
 
         try {
-          await this.$store.dispatch('login', formData)
-          await this.$router.push({
-            name: 'Home',
-            params: {logout: 'false', message: 'Добро пожаловать'},
-          })
+          await this.$store.dispatch('login', formData).then(
+            await this.$router.push({
+              name: 'Home',
+              params: {
+                login: 'true',
+                message: 'Добро пожаловать',
+              },
+            })
+          ).then(console.log('done'))
         } catch (error) {
           this.email = ''
           this.password = ''
@@ -173,7 +176,7 @@ export default {
   opacity: 0;
   transition: 0.5s ease-in-out;
   position: absolute;
-  top: -40px;
+  top: 95px;
   right: -191px;
   background-color: wheat;
   padding: 15px;
@@ -187,5 +190,18 @@ export default {
   font-size: 14px;
   text-align: center;
   font-weight: bold;
+}
+.message-popup {
+  opacity: 0;
+  transition: 0.5s ease-in-out;
+  position: absolute;
+  top: -40px;
+  right: -191px;
+  background-color: wheat;
+  padding: 15px;
+  border-radius: 4px;
+}
+.shown {
+  opacity: 1;
 }
 </style>
