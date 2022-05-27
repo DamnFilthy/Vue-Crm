@@ -2,6 +2,7 @@
   <div class="page-title">
     <div :class="{shown: this.isLogin}" class="message-popup">
       {{ this.message }}
+      <span class="user-name">{{ this.userName }}</span>
     </div>
     <h3>Счет</h3>
 
@@ -39,13 +40,19 @@ export default {
     return {
       loading: false,
       isLogin: this.$route.params.login === 'true',
-      message: this.$route.params.message
+      message: this.$route.params.message,
     }
   },
-  async mounted() {
+   mounted() {
+    console.log('home mounted')
     console.log(this.$route.params.message, this.isLogin)
     setTimeout(() => (this.isLogin = false), 2000)
-    await this.$store.dispatch('fetchFixer')
+    // await this.$store.dispatch('fetchFixer')
+  },
+  computed: {
+    userName() {
+      return this.$store.state.info.info.name
+    },
   },
 }
 </script>
@@ -69,5 +76,9 @@ export default {
 }
 .shown {
   opacity: 1;
+}
+.user-name {
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>

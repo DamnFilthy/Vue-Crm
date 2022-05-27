@@ -8,6 +8,11 @@
  import EmptyLayout from './layouts/EmptyLayout'
  import MainLayout from './layouts/MainLayout'
  export default {
+  async created() {
+   if (!Object.keys(this.$store.state.info.info).length) {
+    await this.$store.dispatch('fetchInfo')
+   }
+  },
   computed: {
    // eslint-disable-next-line vue/return-in-computed-property
    layout() {

@@ -21,7 +21,15 @@
             href="#"
             data-target="dropdown"
           >
-            <span class="mobile-hide-name">{{this.userName}}</span>
+            <span class="mobile-hide-name">
+              <span v-if="this.userName ">
+                {{ this.userName }}
+              </span>
+              <span class="small-spinner" v-else>
+                <LoopingRhombusesSpinner :size="50" :color="'#000'" />
+              </span>
+            </span>
+
             <i class="material-icons right">arrow_drop_down</i>
           </a>
           <ul id="dropdown" class="dropdown-content">
@@ -33,7 +41,10 @@
             <li class="divider" tabindex="-1"></li>
             <li>
               <router-link
-                :to="{name: 'Login', params:{logout:true, message:'Вы вышли из учетной записи'}}"
+                :to="{
+                  name: 'Login',
+                  params: {logout: true, message: 'Вы вышли из учетной записи'},
+                }"
                 class="black-text"
               >
                 <i class="material-icons">assignment_return</i>Выйти
@@ -49,10 +60,10 @@
 <script>
 import M from 'materialize-css'
 import Data from './Data'
-
+import {LoopingRhombusesSpinner} from 'epic-spinners'
 export default {
   name: 'NavBar',
-  components: {Data},
+  components: {Data, LoopingRhombusesSpinner},
   emits: ['openSideBar'],
   data() {
     return {
@@ -71,15 +82,20 @@ export default {
       this.dropdown.destroy
     }
   },
-  computed:{
-    userName(){
+  computed: {
+    userName() {
       return this.$store.state.info.info.name
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style scoped lang="scss">
+.small-spinner {
+  position: absolute;
+  top: 23px;
+  right: 70px;
+}
 @media (min-width: 769px) {
   .mobile-menu-burger {
     display: none;

@@ -84,24 +84,10 @@
 import useVuelidate from '@vuelidate/core'
 import {required, email, minLength} from '@vuelidate/validators'
 import {AtomSpinner} from 'epic-spinners'
-
 export default {
   name: 'Login',
   components: {
     AtomSpinner,
-  },
-  props: {
-    logout: {
-      type: String,
-    },
-    message: {
-      type: String,
-    },
-  },
-  setup() {
-    return {
-      v$: useVuelidate(),
-    }
   },
   data() {
     return {
@@ -109,14 +95,27 @@ export default {
       password: '',
       isLoading: false,
       loginErrors: null,
-      isLogout: this.logout === 'true',
+      isLogout: this.$route.params.logout === 'true',
+      message: this.$route.params.message,
+    }
+  },
+  setup() {
+    return {
+      v$: useVuelidate(),
     }
   },
   async mounted() {
-    setTimeout(() => (this.isLogout = false), 2000)
-
+    setTimeout( () => this.isLogout = false, 2000)
+    console.log('login is mounted')
+    console.log(this.isLogout)
     if (this.isLogout) {
-      await this.$store.dispatch('logout').then(console.log('logout created'))
+      try {
+        await this.$store.dispatch('logout')
+        this.isLogout = false
+      } catch (e) {
+        console.log(e)
+      }
+      console.log('logout is complete')
     }
   },
   methods: {
@@ -133,15 +132,14 @@ export default {
         }
 
         try {
-          await this.$store.dispatch('login', formData).then(
-            await this.$router.push({
-              name: 'Home',
-              params: {
-                login: 'true',
-                message: 'Добро пожаловать',
-              },
-            })
-          ).then(console.log('done'))
+          await this.$store.dispatch('login', formData)
+          await this.$router.push({
+            name: 'Home',
+            params: {
+              login: 'true',
+              message: 'Добро пожаловать',
+            },
+          })
         } catch (error) {
           this.email = ''
           this.password = ''
