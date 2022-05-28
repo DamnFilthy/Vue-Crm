@@ -1,29 +1,35 @@
 <template>
- <component :is="layout">
-  <router-view/>
- </component>
+  <component :is="layout">
+    <router-view />
+  </component>
 </template>
 
 <script>
- import EmptyLayout from './layouts/EmptyLayout'
- import MainLayout from './layouts/MainLayout'
- export default {
+import EmptyLayout from './layouts/EmptyLayout'
+import MainLayout from './layouts/MainLayout'
+import firebase from 'firebase/compat'
+export default {
   async created() {
-   if (!Object.keys(this.$store.state.info.info).length) {
-    await this.$store.dispatch('fetchInfo')
-   }
+    const testUser = await firebase.auth().currentUser
+    console.log('testUser ', testUser)
+    await firebase.auth().onAuthStateChanged((user) => {
+      if (user){
+        this.$store.state.info.currentUserUID = user.uid
+        this.$store.dispatch('fetchInfo', user.uid)
+      }
+    })
   },
   computed: {
-   // eslint-disable-next-line vue/return-in-computed-property
-   layout() {
-    return (this.$route.meta.layout || 'EmptyLayout')
-   }
+    // eslint-disable-next-line vue/return-in-computed-property
+    layout() {
+      return this.$route.meta.layout || 'EmptyLayout'
+    },
   },
-  components: {EmptyLayout, MainLayout}
- }
+  components: {EmptyLayout, MainLayout},
+}
 </script>
 
 <style lang="scss">
-@import "../node_modules/materialize-css/dist/css/materialize.css";
-@import "../Templates/index.css";
+@import '../node_modules/materialize-css/dist/css/materialize.css';
+@import '../Templates/index.css';
 </style>

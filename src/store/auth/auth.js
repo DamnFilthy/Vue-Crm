@@ -13,18 +13,15 @@ export default {
     },
     async logout({commit}) {
       try {
-        // await firebase.auth().signOut()
         const auth = getAuth()
         signOut(auth)
           .then(() => {
-            console.log('sign out success')
             commit('clearInfo')
           })
           .catch((error) => {
             console.log(error)
           })
       } catch (error) {
-        console.log(error)
         throw error
       }
     },
@@ -39,10 +36,6 @@ export default {
       } catch (error) {
         throw error
       }
-    },
-    async getUserId() {
-      const user = await firebase.auth().currentUser
-      return user ? user.uid : null
-    },
+    }
   },
 }

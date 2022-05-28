@@ -34,11 +34,6 @@ export default {
       isSidebarOpen: false,
     }
   },
-  async created() {
-    if (!Object.keys(this.$store.state.info.info).length) {
-      await this.$store.dispatch('fetchInfo')
-    }
-  },
   methods: {
     openSideBar() {
       if (this.innerWidth < 769) {
