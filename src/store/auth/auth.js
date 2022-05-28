@@ -36,6 +36,10 @@ export default {
       } catch (error) {
         throw error
       }
-    }
+    },
+    async getUserId() {
+      const user = await firebase.auth().currentUser
+      return user ? user.uid : null
+    },
   },
 }
