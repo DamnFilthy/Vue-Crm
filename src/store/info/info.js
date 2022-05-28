@@ -4,6 +4,7 @@ export default {
   state: {
     info: {},
     currentUserUID: null,
+    cash: {},
   },
   mutations: {
     setInfo(state, info) {
@@ -12,14 +13,42 @@ export default {
     clearInfo(state) {
       state.info = {}
     },
+    setCash(state, cash) {
+      console.log(cash)
+      state.cash = cash
+    },
   },
   actions: {
     async fetchInfo({commit}, uid = null) {
       try {
         if (uid !== null) {
-          const info = (await firebase.database().ref(`/users/${uid}/info`).once('value')).val()
+          const info = (
+            await firebase.database().ref(`/users/${uid}/info`).once('value')
+          ).val()
           commit('setInfo', info)
         }
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async fetchFixer({commit}) {
+      try {
+        const myHeaders = new Headers(),
+          key = process.env.VUE_APP_FIXER_KEY
+        myHeaders.append('apikey', key)
+
+        const requestOptions = {
+          method: 'GET',
+          redirect: 'follow',
+          headers: myHeaders,
+        }
+
+        const result = await fetch(
+          'https://api.apilayer.com/fixer/latest?symbols=USD,EUR,CNY&base=RUB',
+          requestOptions
+        )
+        const cash = await result.json()
+        commit('setCash', cash.rates)
       } catch (e) {
         console.log(e)
       }
@@ -27,6 +56,5 @@ export default {
   },
   getters: {
     info: (s) => s.info,
-    bill: (b) => b.bill,
   },
 }

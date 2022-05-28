@@ -41,15 +41,16 @@ export default {
       loading: false,
       isLogin: this.$route.params.login === 'true',
       message: this.$route.params.message,
+      fixerData: null,
     }
   },
-   mounted() {
+  async mounted() {
     setTimeout(() => (this.isLogin = false), 2000)
-    // await this.$store.dispatch('fetchFixer')
+    this.fixerData = await this.$store.dispatch('fetchFixer')
   },
   computed: {
     userName() {
-      return this.$store.state.info.info.name
+      return this.$store.getters.info.name
     },
   },
 }
