@@ -183,7 +183,6 @@ export default {
           await this.$store.dispatch('register', formData)
           await this.$router.push({name: 'Home'})
         } catch (error) {
-          console.log(error)
           this.isLoading = false
           this.name = ''
           this.email = ''

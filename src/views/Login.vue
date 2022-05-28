@@ -105,9 +105,7 @@ export default {
     }
   },
   async mounted() {
-    setTimeout( () => this.isLogout = false, 2000)
-    console.log('login is mounted')
-    console.log(this.isLogout)
+    setTimeout(() => (this.isLogout = false), 2000)
     if (this.isLogout) {
       try {
         await this.$store.dispatch('logout')
@@ -115,7 +113,6 @@ export default {
       } catch (e) {
         console.log(e)
       }
-      console.log('logout is complete')
     }
   },
   methods: {

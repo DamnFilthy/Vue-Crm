@@ -10,8 +10,6 @@ import MainLayout from './layouts/MainLayout'
 import firebase from 'firebase/compat'
 export default {
   async created() {
-    const testUser = await firebase.auth().currentUser
-    console.log('testUser ', testUser)
     await firebase.auth().onAuthStateChanged((user) => {
       if (user){
         this.$store.state.info.currentUserUID = user.uid

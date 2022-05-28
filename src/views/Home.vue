@@ -44,8 +44,6 @@ export default {
     }
   },
    mounted() {
-    console.log('home mounted')
-    console.log(this.$route.params.message, this.isLogin)
     setTimeout(() => (this.isLogin = false), 2000)
     // await this.$store.dispatch('fetchFixer')
   },
