@@ -4,7 +4,7 @@ export default {
   state: {
     info: {},
     currentUserUID: null,
-    cash: {},
+    cash: null,
   },
   mutations: {
     setInfo(state, info) {
@@ -14,7 +14,6 @@ export default {
       state.info = {}
     },
     setCash(state, cash) {
-      console.log(cash)
       state.cash = cash
     },
   },
@@ -48,7 +47,7 @@ export default {
           requestOptions
         )
         const cash = await result.json()
-        commit('setCash', cash.rates)
+        commit('setCash', cash)
       } catch (e) {
         console.log(e)
       }

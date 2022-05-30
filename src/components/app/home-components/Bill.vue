@@ -9,8 +9,8 @@
         </div>
       </div>
 
-      <div>
-        <div v-if="bill !== undefined">
+      <div class="cash-row">
+        <div v-if="bill !== undefined && cash !== 0">
           <span>USD: </span>
           <span>{{ usdCash }}</span>
         </div>
@@ -19,8 +19,8 @@
         </div>
       </div>
 
-      <div>
-        <div v-if="bill !== undefined">
+      <div class="cash-row">
+        <div v-if="bill !== undefined && cash !== 0">
           <span>EUR: </span>
           <span>{{ eurCash }}</span>
         </div>
@@ -29,8 +29,8 @@
         </div>
       </div>
 
-      <div>
-        <div v-if="bill !== undefined">
+      <div class="cash-row">
+        <div v-if="bill !== undefined && cash !== 0">
           <span>CNY: </span>
           <span>{{ cnyCash }}</span>
         </div>
@@ -38,13 +38,12 @@
           <LoopingRhombusesSpinner :size="50" :color="'#fff'" />
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
-    import { LoopingRhombusesSpinner } from 'epic-spinners'
+import {LoopingRhombusesSpinner} from 'epic-spinners'
 export default {
   name: 'Bill',
   components: {LoopingRhombusesSpinner},
@@ -55,16 +54,20 @@ export default {
     billCount() {
       return this.$store.state.info.info.bill.toLocaleString('ru-RU') + ' ₽'
     },
-    cash(){
-      return this.$store.state.info.cash
+    cash() {
+      if (this.$store.state.info.cash !== null) {
+        return this.$store.state.info.cash.rates
+      } else {
+        return 0
+      }
     },
-    usdCash(){
+    usdCash() {
       return Number(this.cash.USD * this.bill).toFixed(2) + ' $'
     },
-    eurCash(){
+    eurCash() {
       return Number(this.cash.EUR * this.bill).toFixed(2) + ' €'
     },
-    cnyCash(){
+    cnyCash() {
       return Number(this.cash.CNY * this.bill).toFixed(2) + ' ¥'
     },
   },
@@ -72,7 +75,12 @@ export default {
 </script>
 
 <style scoped>
-    .currency-line {
-        justify-content: center;
-    }
+.currency-line {
+  justify-content: center;
+}
+.cash-row {
+  padding: 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
 </style>

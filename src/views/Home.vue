@@ -6,7 +6,9 @@
     </div>
     <h3>Счет</h3>
 
-    <button class="btn waves-effect waves-light btn-small">
+    <button class="btn waves-effect waves-light btn-small"
+    @click="refresh"
+    >
       <i class="material-icons">refresh</i>
     </button>
   </div>
@@ -40,13 +42,19 @@ export default {
     return {
       loading: false,
       isLogin: this.$route.params.login === 'true',
-      message: this.$route.params.message,
-      fixerData: null,
+      message: this.$route.params.message
     }
   },
   async mounted() {
     setTimeout(() => (this.isLogin = false), 2000)
-    this.fixerData = await this.$store.dispatch('fetchFixer')
+    await this.$store.dispatch('fetchFixer')
+  },
+  methods: {
+    async refresh(){
+      this.loading = true
+      await this.$store.dispatch('fetchFixer')
+      this.loading = false
+    }
   },
   computed: {
     userName() {
