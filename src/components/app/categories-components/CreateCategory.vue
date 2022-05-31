@@ -6,11 +6,10 @@
     <div class="input-field">
       <input
         v-model="v$.title.$model"
-        id="title"
         type="text"
         :class="{invalid: v$.title.$errors.length}"
       />
-      <label for="title" :class="{active: title !== ''}">Название</label>
+      <label :class="{active: title !== ''}">Название</label>
       <small
         class="helper-text invalid"
         v-for="(error, index) of v$.title.$errors"
@@ -38,6 +37,7 @@
       Создать
       <i class="material-icons right">send</i>
     </button>
+    <div>{{ error }} {{ serverError }}</div>
     <MessagePopup :flag="success" message="Категория добавлена!" />
   </form>
 </template>
@@ -63,11 +63,13 @@ export default {
       title: '',
       limit: '',
       success: false,
+      error: this.$store.state.category.categoryError,
+      serverError: null,
     }
   },
   methods: {
     limitInput(value) {
-      this.limit = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')
+      this.limit = Number(value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')).toLocaleString('ru-RU')
     },
     async onSubmit() {
       if (this.v$.$invalid) {
@@ -75,10 +77,11 @@ export default {
       }
       if (!this.v$.$invalid) {
         try {
-          const category = await this.$store.dispatch('createCategory', {
+          await this.$store.dispatch('createCategory', {
             title: this.title,
-            limit: this.limit,
+            limit: parseInt(this.limit.replace(/\D/g,''))
           })
+          await this.$store.dispatch('fetchCategories')
           this.title = ''
           this.limit = ''
           this.success = true
@@ -86,8 +89,8 @@ export default {
           setTimeout(() => {
             this.success = false
           }, 2000)
-          console.log(category)
         } catch (e) {
+          this.serverError = e
           console.log(e)
         }
       }
@@ -122,7 +125,7 @@ export default {
 </script>
 
 <style scoped>
-  .category-form{
-    position: relative;
-  }
+.category-form {
+  position: relative;
+}
 </style>

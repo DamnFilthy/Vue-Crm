@@ -12,5 +12,5 @@ export function confirmPasswordField(password1, password2) {
 }
 
 export function validLimit(value) {
-  return Number(value) > 0 && Number(value[0]) !== 0
+  return Number(value) !== 0 && Number(value[0]) !== 0
 }

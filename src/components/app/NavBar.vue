@@ -21,16 +21,20 @@
             href="#"
             data-target="dropdown"
           >
-            <span class="mobile-hide-name">
-              <span v-if="this.userName ">
+            <div class="mobile-hide-name">
+              <div>
+                <img :src="userAvatar" alt="avatar" />
+              </div>
+              <div v-if="this.userName">
                 {{ this.userName }}
-              </span>
-              <span class="small-spinner" v-else>
+              </div>
+              <div class="small-spinner" v-else>
                 <LoopingRhombusesSpinner :size="50" :color="'#000'" />
-              </span>
-            </span>
-
-            <i class="material-icons right">arrow_drop_down</i>
+              </div>
+              <div>
+                <i class="material-icons right">arrow_drop_down</i>
+              </div>
+            </div>
           </a>
           <ul id="dropdown" class="dropdown-content">
             <li>
@@ -86,11 +90,26 @@ export default {
     userName() {
       return this.$store.state.info.info.name
     },
+    userAvatar() {
+      return this.$store.state.info.info.avatar
+    },
   },
 }
 </script>
 
 <style scoped lang="scss">
+.mobile-hide-name {
+  padding-top: 15px;
+  display: flex;
+  align-items: center;
+  div:not(:last-child) {
+    margin-right: 15px;
+  }
+  img {
+    width: 40px;
+    border-radius: 30px;
+  }
+}
 .small-spinner {
   position: absolute;
   top: 23px;

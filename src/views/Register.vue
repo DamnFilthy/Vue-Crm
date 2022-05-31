@@ -146,6 +146,7 @@ import useVuelidate from '@vuelidate/core'
 import {required, email, minLength} from '@vuelidate/validators'
 import {validName, requiredField} from '../helpers/validations/validators'
 import {AtomSpinner} from 'epic-spinners'
+import md5 from 'blueimp-md5'
 export default {
   name: 'Register',
   components: {
@@ -172,11 +173,12 @@ export default {
       }
       if (!this.v$.$invalid) {
         this.isLoading = true
-
+        console.log(md5(this.email))
         const formData = {
           name: this.name,
           email: this.email,
           password: this.password,
+          avatar: 'https://www.gravatar.com/avatar/' + md5((this.email).toLowerCase())
         }
 
         try {

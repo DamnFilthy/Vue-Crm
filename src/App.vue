@@ -14,6 +14,7 @@ export default {
       if (user){
         this.$store.state.info.currentUserUID = user.uid
         this.$store.dispatch('fetchInfo', user.uid)
+        this.$store.dispatch('fetchCategories')
       }
     })
   },
