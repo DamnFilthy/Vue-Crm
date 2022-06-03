@@ -37,12 +37,12 @@ export default {
             .ref(`/users/${uid}/categories`)
             .once('value')
         ).val()
-
-        categories = Object.keys(categories).map((key) => ({
-          ...categories[key],
-          id: key,
-        }))
-
+        if (categories !== null) {
+          categories = Object.keys(categories).map((key) => ({
+            ...categories[key],
+            id: key,
+          }))
+        }
         commit('setCategories', categories)
       } catch (e) {
         commit('setError')
@@ -54,10 +54,10 @@ export default {
         const uid = this.state.info.currentUserUID
 
         await firebase
-            .database()
-            .ref(`/users/${uid}/categories`)
-            .child(id)
-            .update({title, limit})
+          .database()
+          .ref(`/users/${uid}/categories`)
+          .child(id)
+          .update({title, limit})
       } catch (e) {
         commit('setError')
         throw e

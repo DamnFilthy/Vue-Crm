@@ -1,9 +1,14 @@
 export function validName(name) {
-  let validNamePattern = new RegExp("^([а-яёА-ЯЁ]+|[a-zA-Z]+)(?:[-'\\s]|[а-яёА-ЯЁ]+|[a-zA-Z]+)*$")
+  let validNamePattern = new RegExp(
+    "^([а-яёА-ЯЁ]+|[a-zA-Z]+)(?:[-'\\s]|[а-яёА-ЯЁ]+|[a-zA-Z]+)*$"
+  )
   return validNamePattern.test(name)
 }
 
 export function requiredField(value) {
+  if (typeof value === 'object' && !Object.keys(value).length === Boolean(0)) {
+    return true
+  }
   return value !== null && value !== undefined && value.trim() !== ''
 }
 
