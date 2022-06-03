@@ -15,7 +15,6 @@
           </option>
         </select>
       </label>
-      selectedCategory: {{ selectedCategory }}
       <small
         class="helper-text invalid"
         v-for="(error, index) of v$.selectedCategory.$errors"
@@ -88,6 +87,10 @@
       Создать
       <i class="material-icons right">send</i>
     </button>
+    <MessagePopup :flag="success" message="Запись добавлена!" />
+    <div v-if="attention">
+      <small class="helper-text invalid attention">{{ attention }}</small>
+    </div>
   </form>
 </template>
 
@@ -98,9 +101,11 @@ import {
   validLimit,
   validName,
 } from '../helpers/validations/validators'
+import MessagePopup from '../components/app/MessagePopup'
 
 export default {
   name: 'Record',
+  components: {MessagePopup},
   setup() {
     return {
       v$: useVuelidate(),
@@ -112,17 +117,15 @@ export default {
       type: '',
       title: '',
       limit: '',
-      error: this.$store.state.category.categoryError,
       serverError: null,
+      attention: null,
       success: false,
     }
   },
-  computed: {
-    categoriesObj() {
-      return this.$store.state.category.categories
-    },
-  },
   methods: {
+    getAttention() {
+      this.attention = 'Ваш расход не может привышать остаток по счету!'
+    },
     limitInput(value) {
       this.limit = Number(
         value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')
@@ -134,26 +137,41 @@ export default {
       }
       if (!this.v$.$invalid) {
         try {
-          // await this.$store.dispatch('updateCategory', {
-          //   title: this.title,
-          //   limit: parseInt(this.limit.replace(/\D/g,'')),
-          //   id: this.selectedCategory.id,
-          // })
-          // await this.$store.dispatch('fetchCategories')
-          console.log('calidate success')
-          this.title = ''
-          this.limit = ''
-          this.selectedCategory = ''
-          this.success = true
-          this.v$.$reset()
-          setTimeout(() => {
-            this.success = false
-          }, 2000)
+          if (this.canCreate) {
+            this.title = ''
+            this.limit = ''
+            this.selectedCategory = ''
+            this.success = true
+            this.v$.$reset()
+          } else {
+            this.getAttention()
+          }
         } catch (e) {
           this.serverError = e
           console.log(e)
         }
+        setTimeout(() => {
+          this.success = false
+          this.attention = ''
+        }, 2000)
       }
+    },
+  },
+  computed: {
+    error() {
+      return this.$store.state.category.categoryError
+    },
+    bill() {
+      return this.$store.state.info.info.bill
+    },
+    categoriesObj() {
+      return this.$store.state.category.categories
+    },
+    canCreate() {
+      if (this.type === 'outcome') {
+        return this.bill > parseInt(this.limit.replace(/\D/g, ''))
+      }
+      return true
     },
   },
   validations() {
@@ -197,6 +215,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.attention {
+  font-size: 16px !important;
+}
+form {
+  position: relative;
+}
 .input-field > label {
   position: static;
 }
