@@ -35,9 +35,6 @@ export default {
       loading: this.categoriesObj === null,
     }
   },
-   mounted() {
-    console.log(this.loading)
-  },
   computed: {
     categoriesObj(){
       return this.$store.state.category.categories

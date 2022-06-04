@@ -21,6 +21,7 @@
         :key="index"
         >{{ error.$message }}</small
       >
+      {{ selectedCategory }}
     </div>
     <p>
       <label>
@@ -138,6 +139,22 @@ export default {
       if (!this.v$.$invalid) {
         try {
           if (this.canCreate) {
+            await this.$store.dispatch('createRecord', {
+              categoryLimit: this.selectedCategory.limit,
+              categoryName: this.selectedCategory.title,
+              categoryID: this.selectedCategory.id,
+              amount: parseInt(this.limit.replace(/\D/g, '')),
+              description: this.title,
+              type: this.type,
+              date: new Date().toJSON(),
+            })
+
+            const bill =
+              this.type === 'income'
+                ? this.bill + parseInt(this.limit.replace(/\D/g, ''))
+                : this.bill - parseInt(this.limit.replace(/\D/g, ''))
+            await this.$store.dispatch('updateInfo', {bill})
+
             this.title = ''
             this.limit = ''
             this.selectedCategory = ''
@@ -169,7 +186,10 @@ export default {
     },
     canCreate() {
       if (this.type === 'outcome') {
-        return this.bill > parseInt(this.limit.replace(/\D/g, ''))
+        return (
+          this.bill > parseInt(this.limit.replace(/\D/g, '')) ||
+          this.bill === parseInt(this.limit.replace(/\D/g, ''))
+        )
       }
       return true
     },

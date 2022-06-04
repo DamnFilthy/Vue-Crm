@@ -173,7 +173,6 @@ export default {
       }
       if (!this.v$.$invalid) {
         this.isLoading = true
-        console.log(md5(this.email))
         const formData = {
           name: this.name,
           email: this.email,
