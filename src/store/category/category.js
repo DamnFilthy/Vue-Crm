@@ -20,7 +20,7 @@ export default {
         const category = await firebase
           .database()
           .ref(`/users/${uid}/categories`)
-          .push({title, limit})
+          .push({title, limit, date: new Date().toJSON()})
         return {title, limit, id: category.key}
       } catch (e) {
         commit('setError')
@@ -57,7 +57,7 @@ export default {
           .database()
           .ref(`/users/${uid}/categories`)
           .child(id)
-          .update({title, limit})
+          .update({title, limit, update: new Date().toJSON()})
       } catch (e) {
         commit('setError')
         throw e

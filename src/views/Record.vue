@@ -21,7 +21,6 @@
         :key="index"
         >{{ error.$message }}</small
       >
-      {{ selectedCategory }}
     </div>
     <p>
       <label>
