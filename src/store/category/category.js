@@ -6,7 +6,7 @@ export default {
     categories: null,
   },
   mutations: {
-    setError(state, error) {
+    setCategoryError(state, error) {
       state.categoryError = error
     },
     setCategories(state, categories) {
@@ -23,7 +23,7 @@ export default {
           .push({title, limit, date: new Date().toJSON()})
         return {title, limit, id: category.key}
       } catch (e) {
-        commit('setError')
+        commit('setCategoryError')
         throw e
       }
     },
@@ -45,7 +45,7 @@ export default {
         }
         commit('setCategories', categories)
       } catch (e) {
-        commit('setError')
+        commit('setCategoryError')
         throw e
       }
     },
@@ -59,7 +59,7 @@ export default {
           .child(id)
           .update({title, limit, update: new Date().toJSON()})
       } catch (e) {
-        commit('setError')
+        commit('setCategoryError')
         throw e
       }
     },

@@ -8,7 +8,7 @@ export default {
     cash: null,
   },
   mutations: {
-    setError(state, error){
+    setInfoError(state, error){
       state.infoError = error
     },
     setInfo(state, info) {
@@ -31,7 +31,7 @@ export default {
           commit('setInfo', info)
         }
       } catch (e) {
-        commit('setError', e)
+        commit('setInfoError', e)
       }
     },
     async fetchFixer({commit}) {
@@ -52,11 +52,11 @@ export default {
         )
         const cash = await result.json()
         if (cash.message){
-          commit('setError', cash.message)
+          commit('setInfoError', cash.message)
         }
         commit('setCash', cash)
       } catch (e) {
-        commit('setError', e)
+        commit('setInfoError', e)
       }
     },
     async updateInfo({dispatch, commit}, toUpdate) {
@@ -66,7 +66,7 @@ export default {
         await firebase.database().ref(`/users/${uid}/info`).update(updateData)
         commit('setInfo', updateData)
       } catch (e) {
-        commit('setError', e)
+        commit('setInfoError', e)
       }
     },
   },
