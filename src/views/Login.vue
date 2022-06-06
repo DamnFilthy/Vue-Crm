@@ -105,11 +105,11 @@ export default {
     }
   },
   async mounted() {
+    console.log(this.message, this.isLogout)
     setTimeout(() => (this.isLogout = false), 2000)
     if (this.isLogout) {
       try {
         await this.$store.dispatch('logout')
-        this.isLogout = false
       } catch (e) {
         console.log(e)
       }

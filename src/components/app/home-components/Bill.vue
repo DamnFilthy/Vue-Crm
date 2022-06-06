@@ -8,34 +8,38 @@
           <LoopingRhombusesSpinner :size="50" :color="'#fff'" />
         </div>
       </div>
-
-      <div class="cash-row">
-        <div v-if="bill !== undefined && cash !== 0">
-          <span>USD: </span>
-          <span>{{ usdCash }}</span>
-        </div>
-        <div class="small-spinner" v-else>
-          <LoopingRhombusesSpinner :size="50" :color="'#fff'" />
-        </div>
+      <div v-if="error">
+        {{error}}
       </div>
+      <div v-else>
+        <div class="cash-row">
+          <div v-if="bill !== undefined && cash !== 0">
+            <span>USD: </span>
+            <span>{{ usdCash }}</span>
+          </div>
+          <div class="small-spinner" v-else>
+            <LoopingRhombusesSpinner :size="50" :color="'#fff'" />
+          </div>
+        </div>
 
-      <div class="cash-row">
-        <div v-if="bill !== undefined && cash !== 0">
-          <span>EUR: </span>
-          <span>{{ eurCash }}</span>
+        <div class="cash-row">
+          <div v-if="bill !== undefined && cash !== 0">
+            <span>EUR: </span>
+            <span>{{ eurCash }}</span>
+          </div>
+          <div class="small-spinner" v-else>
+            <LoopingRhombusesSpinner :size="50" :color="'#fff'" />
+          </div>
         </div>
-        <div class="small-spinner" v-else>
-          <LoopingRhombusesSpinner :size="50" :color="'#fff'" />
-        </div>
-      </div>
 
-      <div class="cash-row">
-        <div v-if="bill !== undefined && cash !== 0">
-          <span>CNY: </span>
-          <span>{{ cnyCash }}</span>
-        </div>
-        <div class="small-spinner" v-else>
-          <LoopingRhombusesSpinner :size="50" :color="'#fff'" />
+        <div class="cash-row">
+          <div v-if="bill !== undefined && cash !== 0">
+            <span>CNY: </span>
+            <span>{{ cnyCash }}</span>
+          </div>
+          <div class="small-spinner" v-else>
+            <LoopingRhombusesSpinner :size="50" :color="'#fff'" />
+          </div>
         </div>
       </div>
     </div>
@@ -48,6 +52,9 @@ export default {
   name: 'Bill',
   components: {LoopingRhombusesSpinner},
   computed: {
+    error(){
+      return this.$store.state.info.infoError
+    },
     bill() {
       return this.$store.getters.info.bill
     },

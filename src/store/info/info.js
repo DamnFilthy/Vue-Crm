@@ -2,11 +2,15 @@
 import firebase from 'firebase/compat'
 export default {
   state: {
+    infoError: null,
     info: {},
     currentUserUID: null,
     cash: null,
   },
   mutations: {
+    setError(state, error){
+      state.infoError = error
+    },
     setInfo(state, info) {
       state.info = info
     },
@@ -27,7 +31,7 @@ export default {
           commit('setInfo', info)
         }
       } catch (e) {
-        console.log(e)
+        commit('setError', e)
       }
     },
     async fetchFixer({commit}) {
@@ -47,9 +51,12 @@ export default {
           requestOptions
         )
         const cash = await result.json()
+        if (cash.message){
+          commit('setError', cash.message)
+        }
         commit('setCash', cash)
       } catch (e) {
-        console.log(e)
+        commit('setError', e)
       }
     },
     async updateInfo({dispatch, commit}, toUpdate) {
@@ -59,7 +66,7 @@ export default {
         await firebase.database().ref(`/users/${uid}/info`).update(updateData)
         commit('setInfo', updateData)
       } catch (e) {
-        console.log(e)
+        commit('setError', e)
       }
     },
   },

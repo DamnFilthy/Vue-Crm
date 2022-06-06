@@ -1,4 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import firebase from 'firebase/compat'
 
 export const routes = [
   {
@@ -9,6 +10,7 @@ export const routes = [
     meta: {
       title: 'Главная страница',
       layout: 'MainLayout',
+      auth: true,
     },
   },
   {
@@ -19,6 +21,7 @@ export const routes = [
     meta: {
       title: 'Категории',
       layout: 'MainLayout',
+      auth: true,
     },
   },
   {
@@ -29,6 +32,7 @@ export const routes = [
     meta: {
       title: 'Детали заказа',
       layout: 'MainLayout',
+      auth: true,
     },
   },
   {
@@ -39,6 +43,7 @@ export const routes = [
     meta: {
       title: 'История',
       layout: 'MainLayout',
+      auth: true,
     },
   },
   {
@@ -49,6 +54,7 @@ export const routes = [
     meta: {
       title: 'Планирование',
       layout: 'MainLayout',
+      auth: true,
     },
   },
   {
@@ -59,6 +65,7 @@ export const routes = [
     meta: {
       title: 'Профиль',
       layout: 'MainLayout',
+      auth: true,
     },
   },
   {
@@ -69,6 +76,7 @@ export const routes = [
     meta: {
       title: 'Новая запись',
       layout: 'MainLayout',
+      auth: true,
     },
   },
   {
@@ -98,9 +106,9 @@ export const routes = [
     component: () => import('../views/404.vue'),
     meta: {
       title: 'Страница не найдена',
-      layout: 'MainLayout',
+      layout: 'EmptyLayout',
     },
-  }
+  },
 ]
 
 const router = createRouter({
@@ -109,8 +117,24 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  to.meta.title ? (document.title = to.meta.title) : (document.title = 'Vrm')
-  next()
+  to.meta.title
+    ? (document.title = to.meta.title)
+    : (document.title = 'Vue-crm')
+
+  firebase.auth().onAuthStateChanged((user) => {
+    const requiredAuth = to.matched.some((record) => record.meta.auth)
+    if (requiredAuth && !user) {
+      next({
+        name: 'Login',
+        params: {
+          logout: 'true',
+          message: 'Войдите в систему для доступа к данной странице',
+        },
+      })
+    } else {
+      next()
+    }
+  })
 })
 
 export default router
