@@ -2,7 +2,13 @@
   <ul class="sidenav app-sidenav" :class="{open: !isSidebarOpen}">
     <li v-for="route in this.routes" :key="route.name">
       <router-link
-        v-if="route.name !== 'Register' && route.name !== 'Login' && route.name !== 'Record' && route.name !== 'Profile'"
+        v-if="
+          route.name !== 'Register' &&
+          route.name !== 'Login' &&
+          route.name !== 'Record' &&
+          route.name !== 'Profile' &&
+          route.name !== 'NotFound'
+        "
         :to="{name: route.name}"
         exact
         class="waves-effect waves-light"

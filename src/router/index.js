@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 
 export const routes = [
   {
@@ -92,10 +92,19 @@ export const routes = [
       layout: 'EmptyLayout',
     },
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('../views/404.vue'),
+    meta: {
+      title: 'Страница не найдена',
+      layout: 'MainLayout',
+    },
+  }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
 })
 

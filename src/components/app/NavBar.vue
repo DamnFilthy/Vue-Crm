@@ -21,19 +21,19 @@
             href="#"
             data-target="dropdown"
           >
-            <div class="mobile-hide-name">
+            <div class="mobile-hide-name" v-if="this.userName">
               <div>
                 <img :src="userAvatar" alt="avatar" />
               </div>
-              <div v-if="this.userName">
+              <div>
                 {{ this.userName }}
-              </div>
-              <div class="small-spinner" v-else>
-                <LoopingRhombusesSpinner :size="50" :color="'#000'" />
               </div>
               <div>
                 <i class="material-icons right">arrow_drop_down</i>
               </div>
+            </div>
+            <div class="small-spinner" v-else>
+              <LoopingRhombusesSpinner :size="50" :color="'#000'" />
             </div>
           </a>
           <ul id="dropdown" class="dropdown-content">
