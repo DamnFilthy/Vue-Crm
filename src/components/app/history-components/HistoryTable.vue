@@ -37,7 +37,7 @@
           </span>
         </td>
         <td>
-          <Popper closeDelay="300" placement="right" hover="true" content="Посмотреть запись">
+          <Popper closeDelay="300" placement="right" :hover="true" content="Посмотреть запись">
             <button
               @click.prevent="
                 this.$router.push({path: `/detail-record/${row.id}`})

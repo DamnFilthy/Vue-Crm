@@ -25,7 +25,7 @@ export const routes = [
     },
   },
   {
-    path: '/detail-record',
+    path: '/detail-record/:id',
     name: 'DetailRecord',
     translate: 'Детали заказа',
     component: () => import('../views/DetailRecord.vue'),

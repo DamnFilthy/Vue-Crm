@@ -7,7 +7,8 @@
           route.name !== 'Login' &&
           route.name !== 'Record' &&
           route.name !== 'Profile' &&
-          route.name !== 'NotFound'
+          route.name !== 'NotFound' &&
+          route.name !== 'DetailRecord'
         "
         :to="{name: route.name}"
         exact
