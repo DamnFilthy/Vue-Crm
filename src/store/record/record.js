@@ -33,13 +33,19 @@ export default {
         let records = (
           await firebase.database().ref(`/users/${uid}/records`).once('value')
         ).val()
+
         if (records !== null) {
           records = Object.keys(records).map((key) => ({
             ...records[key],
             id: key,
           }))
         }
-        commit('setRecords', records)
+
+        if (records === null) {
+          commit('setRecords', '')
+        } else {
+          commit('setRecords', records)
+        }
       } catch (e) {
         commit('setRecordError')
         throw e
