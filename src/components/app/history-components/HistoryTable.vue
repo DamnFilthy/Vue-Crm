@@ -76,4 +76,10 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss">
+  :root {
+    --popper-theme-background-color: #ffa726;
+    --popper-theme-padding: 10px 20px;
+    --popper-theme-border-radius: 20px;
+  }
+</style>

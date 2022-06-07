@@ -16,15 +16,16 @@
       </span>
     </a>
   </div>
-  <div class="row">
+  <div class="row" v-if="recordById">
     <div class="col s12 m6">
       <div class="card red">
-        <div v-if="recordById"
-               :class="{
+        <div
+          :class="{
             red: recordById[0].type === 'outcome',
             green: recordById[0].type === 'income',
           }"
-             class="card-content white-text">
+          class="card-content white-text"
+        >
           <p>
             Описание:
             <span>{{ recordById[0].description }}</span>
@@ -51,11 +52,16 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <AtomSpinner :size="150" :color="'#ffa726'" />
+  </div>
 </template>
 
 <script>
+import {AtomSpinner} from 'epic-spinners'
 export default {
   name: 'DetailRecord',
+  components: {AtomSpinner},
   async created() {
     await this.$store.dispatch('fetchRecords')
   },
