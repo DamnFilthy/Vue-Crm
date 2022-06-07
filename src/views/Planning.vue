@@ -5,14 +5,20 @@
   <div v-else>
     <div class="page-title">
       <h3>Планирование</h3>
-      <div>
+      <div v-if="totalIncome !== null && totalOutcome !== null">
         <div>План по доходу: {{ totalIncome.toLocaleString('ru-RU') }} ₽</div>
         <div>
           Лимит по расходу: {{ totalOutcome.toLocaleString('ru-RU') }} ₽
         </div>
       </div>
+      <div v-else>
+        <LoopingRhombusesSpinner :size="50" :color="'#68de4b'" />
+      </div>
     </div>
-    <div>
+    <div
+      class="mb30"
+      v-if="totalInfoIncomeSum !== null && totalInfoOutcomeSum !== null"
+    >
       <div>
         Всего заработал: {{ totalInfoIncomeSum.toLocaleString('ru-RU') }} ₽
       </div>
@@ -20,8 +26,20 @@
         Всего потратил: {{ totalInfoOutcomeSum.toLocaleString('ru-RU') }} ₽
       </div>
     </div>
-    <section>
-      <div>Траты</div>
+    <div v-else>
+      <LoopingRhombusesSpinner :size="50" :color="'#68de4b'" />
+    </div>
+    <div
+      :class="{'collapse-btn-active': this.showOutcome}"
+      class="page-title collapse-btn"
+      @click="this.showOutcome = !this.showOutcome"
+    >
+      Траты
+    </div>
+    <div
+      class="collapse-block"
+      :class="{'collapse-block-open': this.showOutcome}"
+    >
       <div v-for="info in totalInfoOutcome" :key="info.id">
         <div v-if="info.type === 'outcome'">
           <Popper
@@ -45,9 +63,19 @@
           </div>
         </div>
       </div>
-    </section>
-    <section>
-      <div>Доходы</div>
+    </div>
+
+    <div
+      :class="{'collapse-btn-active': this.showIncome}"
+      class="page-title collapse-btn"
+      @click="this.showIncome = !showIncome"
+    >
+      Доходы
+    </div>
+    <div
+      class="collapse-block"
+      :class="{'collapse-block-open': this.showIncome}"
+    >
       <div v-for="info in totalInfoIncome" :key="info.id">
         <div v-if="info.type === 'income'">
           <Popper
@@ -71,29 +99,38 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <script>
+import {LoopingRhombusesSpinner} from 'epic-spinners'
 import {AtomSpinner} from 'epic-spinners'
 import Popper from 'vue3-popper'
+import firebase from 'firebase/compat'
 export default {
   name: 'Planning',
   components: {
     AtomSpinner,
+    LoopingRhombusesSpinner,
     Popper,
   },
   data() {
     return {
-      loading: this.totalInfo === null,
+      showOutcome: false,
+      showIncome: false,
+      loading: this.categoriesList === null,
       categories: this.categoriesList,
       records: this.recordsList,
     }
   },
-  created() {
-    this.$store.dispatch('fetchCategories')
-    this.$store.dispatch('fetchRecords')
+  async created() {
+    await firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.$store.dispatch('fetchCategories')
+        this.$store.dispatch('fetchRecords')
+      }
+    })
   },
   computed: {
     categoriesList() {
@@ -110,8 +147,10 @@ export default {
             totalSum += this.categoriesList[i].limit
           }
         }
+        return totalSum
+      } else {
+        return null
       }
-      return totalSum
     },
     totalOutcome() {
       let totalSum = 0
@@ -121,8 +160,10 @@ export default {
             totalSum += this.categoriesList[i].limit
           }
         }
+        return totalSum
+      } else {
+        return null
       }
-      return totalSum
     },
     totalInfoOutcome() {
       if (this.categoriesList !== null && this.recordsList !== null) {
@@ -166,26 +207,63 @@ export default {
     },
     totalInfoOutcomeSum() {
       let outcomeSum = 0
-      for (let i = 0; i < this.totalInfoOutcome.length; i++) {
-        if (this.totalInfoOutcome[i].type === 'outcome') {
-          outcomeSum += this.totalInfoOutcome[i].spend
+      if (this.totalInfoOutcome !== null) {
+        for (let i = 0; i < this.totalInfoOutcome.length; i++) {
+          if (this.totalInfoOutcome[i].type === 'outcome') {
+            outcomeSum += this.totalInfoOutcome[i].spend
+          }
         }
-        console.log(this.totalInfoOutcome[i])
+        return outcomeSum
+      } else {
+        return null
       }
-      return outcomeSum
     },
     totalInfoIncomeSum() {
       let incomeSum = 0
-      for (let i = 0; i < this.totalInfoIncome.length; i++) {
-        if (this.totalInfoIncome[i].type === 'income') {
-          incomeSum += this.totalInfoIncome[i].spend
+      if (this.totalInfoIncome !== null) {
+        for (let i = 0; i < this.totalInfoIncome.length; i++) {
+          if (this.totalInfoIncome[i].type === 'income') {
+            incomeSum += this.totalInfoIncome[i].spend
+          }
         }
-        console.log(this.totalInfoIncome[i])
+        return incomeSum
+      } else {
+        return null
       }
-      return incomeSum
     },
   },
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.mb30 {
+  margin-bottom: 30px;
+}
+.collapse-block {
+  height: 0;
+  transition: 0.3s all;
+  opacity: 0;
+  visibility: hidden;
+  overflow-y: hidden;
+}
+.collapse-block-open {
+  overflow-y: auto;
+  height: 220px;
+  opacity: 1;
+  visibility: visible;
+}
+.collapse-btn {
+  transition: 0.5s ease-in-out;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  &:hover {
+    color: green;
+    border-bottom: 1px solid green;
+  }
+}
+.collapse-btn-active {
+  color: #40cd40;
+}
+</style>
