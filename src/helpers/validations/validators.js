@@ -4,7 +4,6 @@ export function validName(name) {
   )
   return validNamePattern.test(name)
 }
-
 export function requiredField(value) {
   if (typeof value === 'object' && !Object.keys(value).length === Boolean(0)) {
     return true

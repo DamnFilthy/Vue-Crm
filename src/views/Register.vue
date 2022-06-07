@@ -12,7 +12,7 @@
               v-model="v$.name.$model"
               id="name"
               type="text"
-              :class="{invalid: v$.email.$errors.length}"
+              :class="{invalid: v$.name.$errors.length}"
             />
             <label for="name">Имя</label>
             <small
@@ -121,7 +121,6 @@
             {{ this.loginErrors }}
           </div>
           <div>
-
             <button
               class="btn waves-effect waves-light auth-submit"
               type="submit"
@@ -177,7 +176,8 @@ export default {
           name: this.name,
           email: this.email,
           password: this.password,
-          avatar: 'https://www.gravatar.com/avatar/' + md5((this.email).toLowerCase())
+          avatar:
+            'https://www.gravatar.com/avatar/' + md5(this.email.toLowerCase()),
         }
 
         try {
@@ -233,7 +233,7 @@ export default {
   justify-content: center;
   padding: 100px;
 }
-.firebase-error{
+.firebase-error {
   margin-bottom: 15px;
   font-size: 14px;
   text-align: center;

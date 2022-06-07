@@ -22,9 +22,10 @@
             data-target="dropdown"
           >
             <div class="mobile-hide-name" v-if="this.userName">
-              <div>
-                <img :src="userAvatar" alt="avatar" />
-              </div>
+              <div
+                class="user-avatar"
+                :style="{'background-image': 'url(' + this.userAvatar + ')'}"
+              ></div>
               <div>
                 {{ this.userName }}
               </div>
@@ -98,8 +99,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.user-avatar {
+  height: 55px;
+  width: 60px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 100%;
+  background-position: 50% 50%;
+}
 .mobile-hide-name {
-  padding-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
   display: flex;
   align-items: center;
   div:not(:last-child) {
