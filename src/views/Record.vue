@@ -1,4 +1,7 @@
 <template>
+  <pre>
+    {{selectedCategory}}
+  </pre>
   <div class="page-title">
     <h3>Новая запись</h3>
   </div>
@@ -22,7 +25,7 @@
         >{{ error.$message }}</small
       >
     </div>
-    <p>
+    <p v-if="selectedCategory.type === 'income'">
       <label>
         <input
           v-model="v$.type.$model"
@@ -35,7 +38,7 @@
         <span>Доход</span>
       </label>
     </p>
-    <p>
+    <p v-if="selectedCategory.type === 'outcome'">
       <label>
         <input
           v-model="v$.type.$model"
