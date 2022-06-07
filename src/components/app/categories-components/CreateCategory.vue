@@ -17,6 +17,38 @@
         >{{ error.$message }}</small
       >
     </div>
+    <p>
+      <label>
+        <input
+          v-model="v$.type.$model"
+          :class="{invalid: v$.type.$errors.length}"
+          class="with-gap"
+          name="type"
+          type="radio"
+          value="income"
+        />
+        <span>Доход</span>
+      </label>
+    </p>
+    <p>
+      <label>
+        <input
+          v-model="v$.type.$model"
+          :class="{invalid: v$.type.$errors.length}"
+          class="with-gap"
+          name="type"
+          type="radio"
+          value="outcome"
+        />
+        <span>Расход</span>
+      </label>
+    </p>
+    <small
+      class="helper-text invalid"
+      v-for="(error, index) of v$.type.$errors"
+      :key="index"
+      >{{ error.$message }}</small
+    >
     <div class="input-field">
       <input
         @input="limitInput($event.target.value)"
@@ -62,6 +94,7 @@ export default {
     return {
       title: '',
       limit: '',
+      type: '',
       success: false,
       error: this.$store.state.category.categoryError,
       serverError: null,
@@ -69,7 +102,9 @@ export default {
   },
   methods: {
     limitInput(value) {
-      this.limit = Number(value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')).toLocaleString('ru-RU')
+      this.limit = Number(
+        value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')
+      ).toLocaleString('ru-RU')
     },
     async onSubmit() {
       if (this.v$.$invalid) {
@@ -79,11 +114,13 @@ export default {
         try {
           await this.$store.dispatch('createCategory', {
             title: this.title,
-            limit: parseInt(this.limit.replace(/\D/g,''))
+            type: this.type,
+            limit: parseInt(this.limit.replace(/\D/g, '')),
           })
           await this.$store.dispatch('fetchCategories')
           this.title = ''
           this.limit = ''
+          this.type = ''
           this.success = true
           this.v$.$reset()
           setTimeout(() => {
@@ -117,6 +154,12 @@ export default {
         name_validation: {
           $validator: validLimit,
           $message: 'Минимальное значение для лимита должно быть больше 0',
+        },
+      },
+      type: {
+        required_validation: {
+          $validator: requiredField,
+          $message: 'Это поле обязательно для заполнения',
         },
       },
     }

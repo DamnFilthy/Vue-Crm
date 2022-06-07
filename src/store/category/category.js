@@ -14,14 +14,28 @@ export default {
     },
   },
   actions: {
-    async createCategory({commit}, {title, limit}) {
+    async createCategory({commit}, {title, limit, type}) {
       try {
         const uid = this.state.info.currentUserUID
         const category = await firebase
           .database()
           .ref(`/users/${uid}/categories`)
-          .push({title, limit, date: new Date().toJSON()})
-        return {title, limit, id: category.key}
+          .push({title, limit, type, date: new Date().toJSON()})
+        return {title, limit, type, id: category.key}
+      } catch (e) {
+        commit('setCategoryError')
+        throw e
+      }
+    },
+    async updateCategory({commit}, {title, limit, id}) {
+      try {
+        const uid = this.state.info.currentUserUID
+
+        await firebase
+          .database()
+          .ref(`/users/${uid}/categories`)
+          .child(id)
+          .update({title, limit, update: new Date().toJSON()})
       } catch (e) {
         commit('setCategoryError')
         throw e
@@ -44,20 +58,6 @@ export default {
           }))
         }
         commit('setCategories', categories)
-      } catch (e) {
-        commit('setCategoryError')
-        throw e
-      }
-    },
-    async updateCategory({commit}, {title, limit, id}) {
-      try {
-        const uid = this.state.info.currentUserUID
-
-        await firebase
-          .database()
-          .ref(`/users/${uid}/categories`)
-          .child(id)
-          .update({title, limit, update: new Date().toJSON()})
       } catch (e) {
         commit('setCategoryError')
         throw e
