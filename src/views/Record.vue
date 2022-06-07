@@ -1,23 +1,19 @@
 <template>
-  <pre>
-    {{selectedCategory}}
-  </pre>
   <div class="page-title">
     <h3>Новая запись</h3>
   </div>
   <form class="form" @submit.prevent="onSubmit">
     <div class="input-field mb-30">
-      <label>
-        <select
-          v-model="v$.selectedCategory.$model"
-          :class="{invalid: v$.selectedCategory.$errors.length}"
-        >
-          <option disabled value="">Категория</option>
-          <option v-for="option in categoriesObj" :key="option" :value="option">
-            {{ option.title }}
-          </option>
-        </select>
-      </label>
+      <select
+        @change="categoryChange()"
+        v-model="v$.selectedCategory.$model"
+        :class="{invalid: v$.selectedCategory.$errors.length}"
+      >
+        <option disabled value="">Категория</option>
+        <option v-for="option in categoriesObj" :key="option" :value="option">
+          {{ option.title }}
+        </option>
+      </select>
       <small
         class="helper-text invalid"
         v-for="(error, index) of v$.selectedCategory.$errors"
@@ -126,6 +122,9 @@ export default {
     }
   },
   methods: {
+    categoryChange() {
+      this.type = this.selectedCategory.type
+    },
     getAttention() {
       this.attention = 'Ваш расход не может привышать остаток по счету!'
     },
@@ -243,9 +242,7 @@ export default {
 form {
   position: relative;
 }
-.input-field > label {
-  position: static;
-}
+
 .mb-30 {
   margin-bottom: 30px;
 }

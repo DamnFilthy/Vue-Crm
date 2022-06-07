@@ -27,7 +27,7 @@ export default {
         throw e
       }
     },
-    async updateCategory({commit}, {title, limit, id}) {
+    async updateCategory({commit}, {title, type, limit, id}) {
       try {
         const uid = this.state.info.currentUserUID
 
@@ -35,7 +35,7 @@ export default {
           .database()
           .ref(`/users/${uid}/categories`)
           .child(id)
-          .update({title, limit, update: new Date().toJSON()})
+          .update({title, type, limit, update: new Date().toJSON()})
       } catch (e) {
         commit('setCategoryError')
         throw e

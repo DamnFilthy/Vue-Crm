@@ -34,6 +34,41 @@
         >{{ error.$message }}</small
       >
     </div>
+    <div v-if="selectedCategory">
+      <p>
+        <label>
+          <input
+            v-model="v$.type.$model"
+            :class="{invalid: v$.type.$errors.length}"
+            class="with-gap"
+            name="type"
+            type="radio"
+            value="income"
+          />
+          <span>Доход</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input
+            v-model="v$.type.$model"
+            :class="{invalid: v$.type.$errors.length}"
+            class="with-gap"
+            name="type"
+            type="radio"
+            value="outcome"
+          />
+          <span>Расход</span>
+        </label>
+      </p>
+      <small
+              class="helper-text invalid"
+              v-for="(error, index) of v$.type.$errors"
+              :key="index"
+      >{{ error.$message }}</small
+      >
+    </div>
+
     <div class="input-field">
       <input
         :disabled="this.selectedCategory === ''"
@@ -85,19 +120,23 @@ export default {
     return {
       title: '',
       limit: '',
+      type: '',
       selectedCategory: '',
       error: this.$store.state.category.categoryError,
       serverError: null,
-      success: false
+      success: false,
     }
   },
   methods: {
     onChangeSelectedCategory() {
+      this.type = this.selectedCategory.type
       this.title = this.selectedCategory.title
       this.limit = Number(this.selectedCategory.limit).toLocaleString('ru-RU')
     },
     limitInput(value) {
-      this.limit = Number(value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')).toLocaleString('ru-RU')
+      this.limit = Number(
+        value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')
+      ).toLocaleString('ru-RU')
     },
     async onSubmit() {
       if (this.v$.$invalid) {
@@ -107,11 +146,13 @@ export default {
         try {
           await this.$store.dispatch('updateCategory', {
             title: this.title,
-            limit: parseInt(this.limit.replace(/\D/g,'')),
+            type: this.type,
+            limit: parseInt(this.limit.replace(/\D/g, '')),
             id: this.selectedCategory.id,
           })
           await this.$store.dispatch('fetchCategories')
           this.title = ''
+          this.type = ''
           this.limit = ''
           this.selectedCategory = ''
           this.success = true
@@ -147,6 +188,12 @@ export default {
         name_validation: {
           $validator: validLimit,
           $message: 'Минимальное значение для лимита должно быть больше 0',
+        },
+      },
+      type: {
+        required_validation: {
+          $validator: requiredField,
+          $message: 'Это поле обязательно для заполнения',
         },
       },
     }

@@ -17,32 +17,35 @@
         >{{ error.$message }}</small
       >
     </div>
-    <p>
-      <label>
-        <input
-          v-model="v$.type.$model"
-          :class="{invalid: v$.type.$errors.length}"
-          class="with-gap"
-          name="type"
-          type="radio"
-          value="income"
-        />
-        <span>Доход</span>
-      </label>
-    </p>
-    <p>
-      <label>
-        <input
-          v-model="v$.type.$model"
-          :class="{invalid: v$.type.$errors.length}"
-          class="with-gap"
-          name="type"
-          type="radio"
-          value="outcome"
-        />
-        <span>Расход</span>
-      </label>
-    </p>
+    <div v-if="showRadio">
+      <p>
+        <label>
+          <input
+            v-model="v$.type.$model"
+            :class="{invalid: v$.type.$errors.length}"
+            class="with-gap"
+            name="type"
+            type="radio"
+            value="income"
+          />
+          <span>Доход</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input
+            v-model="v$.type.$model"
+            :class="{invalid: v$.type.$errors.length}"
+            class="with-gap"
+            name="type"
+            type="radio"
+            value="outcome"
+          />
+          <span>Расход</span>
+        </label>
+      </p>
+    </div>
+
     <small
       class="helper-text invalid"
       v-for="(error, index) of v$.type.$errors"
@@ -131,6 +134,11 @@ export default {
           console.log(e)
         }
       }
+    },
+  },
+  computed: {
+    showRadio() {
+      return this.title !== ''
     },
   },
   validations() {
