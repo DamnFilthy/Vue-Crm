@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import 'materialize-css/dist/js/materialize.js'
 import firebase from 'firebase/compat'
+import Paginate from 'vuejs-paginate'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA16FA_BW_cxhRa9dkW7biRTcqrIkONvkE',
@@ -16,4 +17,8 @@ const firebaseConfig = {
 }
 
 firebase.initializeApp(firebaseConfig)
-createApp(App).use(store).use(router).mount('#app')
+createApp(App)
+  .use(store)
+  .use(router)
+  .component('Paginate', Paginate)
+  .mount('#app')

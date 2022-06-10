@@ -2,18 +2,18 @@
   <table>
     <thead>
       <tr>
-        <th>№</th>
-        <th>Сумма</th>
-        <th>Дата</th>
-        <th>Категория</th>
-        <th>Тип</th>
-        <th>Открыть</th>
+        <td>№</td>
+        <td>Сумма</td>
+        <td>Дата</td>
+        <td>Категория</td>
+        <td>Тип</td>
+        <td>Открыть</td>
       </tr>
     </thead>
 
-    <tbody v-if="recordList">
-      <tr v-for="(row, index) in this.recordList" :key="row.id">
-        <td>{{ index + 1 }}</td>
+    <tbody v-if="recordsToShow">
+      <tr v-for="row in this.recordsToShow" :key="row.id">
+        <td>{{ row.number + 1}}</td>
         <td>{{ row.amount.toLocaleString('ru-RU') }} ₽</td>
         <td>
           {{
@@ -37,7 +37,12 @@
           </span>
         </td>
         <td>
-          <Popper closeDelay="300" placement="right" :hover="true" content="Посмотреть запись">
+          <Popper
+            closeDelay="300"
+            placement="right"
+            :hover="true"
+            content="Посмотреть запись"
+          >
             <button
               @click.prevent="
                 this.$router.push({path: `/detail-record/${row.id}`})
@@ -57,6 +62,33 @@
       У вас пока нет ни одной записи..
     </tbody>
   </table>
+
+  <div class="account-bonus__pagination">
+    <div class="mr-10" v-show="currentPage > 1">
+      <a href="#" @click.prevent="getPage(1), startPage()">Начало </a> |
+      <a href="#" @click.prevent="getPage(thisPage - 1), checkPage(thisPage)">
+        Пред.</a
+      >
+    </div>
+    <div class="pagination-links">
+      <div class="mr-10" v-for="(page, index) in shownPages" :key="index">
+        <a
+          href="#"
+          @click.prevent="getPage(page), checkPage(page)"
+          :class="{active: page === currentPage}"
+          >{{ page }}</a
+        >
+      </div>
+    </div>
+    <div v-show="currentPage < countPages">
+      |
+      <a href="#" @click.prevent="getPage(thisPage + 1), checkPage(thisPage)">
+        След.
+      </a>
+      |
+      <a href="#" @click.prevent="getPage(countPages), endPage()"> Конец </a>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -65,21 +97,122 @@ import Popper from 'vue3-popper'
 export default {
   name: 'HistoryTable',
   components: {AtomSpinner, Popper},
+  data() {
+    return {
+      currentPage: 1,
+      start: 0,
+      finish: 5,
+      countToShowRecords: 5,
+    }
+  },
   async created() {
     await this.$store.dispatch('fetchRecords')
   },
   computed: {
     recordList() {
-      return this.$store.state.record.records
+      if (this.$store.state.record.records !== null) {
+        for (const [
+          index,
+          item,
+        ] of this.$store.state.record.records.entries()) {
+          item['number'] = index
+        }
+        return this.$store.state.record.records
+      } else {
+        return null
+      }
+    },
+    recordsToShow() {
+      if (this.recordList !== null) {
+        return this.recordList.slice(
+          this.countToShowRecords * (this.currentPage - 1),
+          this.countToShowRecords * (this.currentPage - 1) +
+            this.countToShowRecords
+        )
+      } else {
+        return null
+      }
+    },
+    countPages() {
+      if (this.recordList !== null) {
+        return Math.ceil(this.recordList.length / this.countToShowRecords)
+      } else {
+        return null
+      }
+    },
+    shownPages() {
+      let arr = []
+      for (let i = 0; i < this.countPages; i++) {
+        arr.push(i + 1)
+      }
+      return arr.slice(this.start, this.finish)
+    },
+    thisPage() {
+      return this.currentPage
+    },
+  },
+  methods: {
+    getPage(page) {
+      this.currentPage = page
+    },
+    startPage() {
+      this.finish = 5
+      this.start = 0
+    },
+    endPage() {
+      this.finish = this.countPages
+      this.start = this.countPages - 5
+    },
+    checkPage(page) {
+      // forward
+      if (page === this.shownPages[this.shownPages.length - 1]) {
+        this.start = page - 4
+        this.finish = page + 1
+      }
+      // backward
+      if (page === this.shownPages[0]) {
+        this.start = page - 2
+        this.finish = page + 4
+        if (this.start < 0) {
+          this.start = 0
+        }
+      }
     },
   },
 }
 </script>
 
-<style lang="scss">
-  :root {
-    --popper-theme-background-color: #ffa726;
-    --popper-theme-padding: 10px 20px;
-    --popper-theme-border-radius: 20px;
+<style scope lang="scss">
+:root {
+  --popper-theme-background-color: #ffa726;
+  --popper-theme-padding: 10px 20px;
+  --popper-theme-border-radius: 20px;
+}
+.pagination__wrapper {
+  display: flex;
+}
+.page {
+  margin-top: 30px;
+  margin-right: 30px;
+  cursor: pointer;
+}
+
+.account-bonus__pagination {
+  user-select: none;
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  a {
+    &.active {
+      color: orange;
+    }
   }
+}
+.pagination-links {
+  display: flex;
+}
+.mr-10 {
+  margin-right: 10px;
+}
 </style>

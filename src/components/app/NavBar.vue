@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import M from 'materialize-css'
+// import M from 'materialize-css'
 import Data from './Data'
 import {LoopingRhombusesSpinner} from 'epic-spinners'
 export default {
@@ -76,11 +76,11 @@ export default {
     }
   },
   mounted() {
-    this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
-      constrainWidth: true,
-      inDuration: 350,
-      alignment: 'right',
-    })
+    // this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
+    //   constrainWidth: true,
+    //   inDuration: 350,
+    //   alignment: 'right',
+    // })
   },
   beforeUnmount() {
     if (this.dropdown.destroy) {
