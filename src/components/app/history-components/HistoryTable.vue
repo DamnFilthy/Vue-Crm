@@ -99,7 +99,7 @@ export default {
   components: {AtomSpinner, Popper},
   data() {
     return {
-      currentPage: 1,
+      currentPage: +this.$route.query.page || 1,
       start: 0,
       finish: 5,
       countToShowRecords: 5,
@@ -154,6 +154,7 @@ export default {
   methods: {
     getPage(page) {
       this.currentPage = page
+      this.$router.push(`${this.$route.path}?page=${page}`)
     },
     startPage() {
       this.finish = 5
@@ -183,6 +184,7 @@ export default {
 </script>
 
 <style scope lang="scss">
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
 :root {
   --popper-theme-background-color: #ffa726;
   --popper-theme-padding: 10px 20px;
@@ -199,13 +201,36 @@ export default {
 
 .account-bonus__pagination {
   user-select: none;
-  margin-top: 28px;
+  margin-top: 40px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   a {
+    text-decoration: none;
+    position: relative;
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    color: #381d1d;
+    font-weight: 400;
+    &::after {
+      display: block;
+      position: absolute;
+      left: 0; /*изменить на right:0;, чтобы изменить направление подчёркивания */
+      width: 0;/*задаём длинну линии до наведения курсора*/
+      height: 2px; /*задаём ширину линии*/
+      background-color: #000000; /*задаём цвет линии*/
+      content: "";
+      transition: width 0.3s ease-out; /*задаём время анимации*/
+    }
+    &:hover::after,
+    &:focus::after {
+      width: 100%; /*устанавливаем значение 100% чтобы ссылка подчёркивалась полностью*/
+    }
     &.active {
       color: orange;
+      &:after {
+        width: 100%; /*устанавливаем значение 100% чтобы ссылка подчёркивалась полностью*/
+      }
     }
   }
 }
@@ -215,4 +240,5 @@ export default {
 .mr-10 {
   margin-right: 10px;
 }
+
 </style>
