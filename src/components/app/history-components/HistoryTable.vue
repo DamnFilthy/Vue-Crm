@@ -1,4 +1,9 @@
 <template>
+  <ChartBlock
+    v-if="this.categories !== null && this.recordList !== null"
+    :category-list="this.categories"
+    :record-list="this.recordList"
+  />
   <table>
     <thead>
       <tr>
@@ -10,10 +15,9 @@
         <td>Открыть</td>
       </tr>
     </thead>
-
-    <tbody v-if="recordsToShow">
+    <tbody v-if="recordsToShow !== null">
       <tr v-for="row in this.recordsToShow" :key="row.id">
-        <td>{{ row.number + 1}}</td>
+        <td>{{ row.number + 1 }}</td>
         <td>{{ row.amount.toLocaleString('ru-RU') }} ₽</td>
         <td>
           {{
@@ -62,8 +66,7 @@
       У вас пока нет ни одной записи..
     </tbody>
   </table>
-
-  <div class="account-bonus__pagination">
+  <div v-if="recordList !== null && shownPages.length > 1" class="account-bonus__pagination">
     <div class="mr-10" v-show="currentPage > 1">
       <a href="#" @click.prevent="getPage(1), startPage()">Начало </a> |
       <a href="#" @click.prevent="getPage(thisPage - 1), checkPage(thisPage)">
@@ -90,25 +93,29 @@
     </div>
   </div>
 </template>
-
 <script>
 import {AtomSpinner} from 'epic-spinners'
 import Popper from 'vue3-popper'
+import ChartBlock from './ChartBlock'
 export default {
   name: 'HistoryTable',
-  components: {AtomSpinner, Popper},
+  components: {AtomSpinner, Popper, ChartBlock},
   data() {
     return {
       currentPage: +this.$route.query.page || 1,
       start: 0,
       finish: 5,
-      countToShowRecords: 5,
+      countToShowRecords: 4,
     }
   },
   async created() {
+    await this.$store.dispatch('fetchCategories')
     await this.$store.dispatch('fetchRecords')
   },
   computed: {
+    categories() {
+      return this.$store.state.category.categories
+    },
     recordList() {
       if (this.$store.state.record.records !== null) {
         for (const [
@@ -184,7 +191,7 @@ export default {
 </script>
 
 <style scope lang="scss">
-  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
 :root {
   --popper-theme-background-color: #ffa726;
   --popper-theme-padding: 10px 20px;
@@ -215,21 +222,20 @@ export default {
     &::after {
       display: block;
       position: absolute;
-      left: 0; /*изменить на right:0;, чтобы изменить направление подчёркивания */
-      width: 0;/*задаём длинну линии до наведения курсора*/
-      height: 2px; /*задаём ширину линии*/
-      background-color: #000000; /*задаём цвет линии*/
-      content: "";
-      transition: width 0.3s ease-out; /*задаём время анимации*/
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #000000;
+      content: '';
+      transition: width 0.3s ease-out;
     }
-    &:hover::after,
-    &:focus::after {
-      width: 100%; /*устанавливаем значение 100% чтобы ссылка подчёркивалась полностью*/
+    &:hover::after {
+      width: 100%;
     }
     &.active {
       color: orange;
       &:after {
-        width: 100%; /*устанавливаем значение 100% чтобы ссылка подчёркивалась полностью*/
+        width: 100%;
       }
     }
   }
@@ -240,5 +246,4 @@ export default {
 .mr-10 {
   margin-right: 10px;
 }
-
 </style>
