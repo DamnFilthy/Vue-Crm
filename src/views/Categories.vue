@@ -4,7 +4,7 @@
   </div>
   <section>
     <div class="row">
-      <div class="col s12 m6">
+      <div class="mobile-block col s12 m6">
         <CreateCategory />
       </div>
       <div class="col s12 m6">
@@ -44,4 +44,9 @@ export default {
 </script>
 
 <style scoped>
+  @media (max-width: 600px){
+    .mobile-block{
+      margin-bottom: 30px;
+    }
+  }
 </style>

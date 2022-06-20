@@ -239,4 +239,14 @@ export default {
   text-align: center;
   font-weight: bold;
 }
+@media (max-width: 534px) {
+  .auth-card {
+    width: 400px;
+  }
+}
+@media (max-width: 415px) {
+  .auth-card {
+    width: 300px;
+  }
+}
 </style>
