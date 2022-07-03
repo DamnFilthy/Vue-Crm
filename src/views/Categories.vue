@@ -43,7 +43,21 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  @media (max-width: 1024px){
+    .row{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      div:nth-child(1){
+        margin-bottom: 30px;
+      }
+      div{
+        width: 100% !important;
+      }
+    }
+  }
   @media (max-width: 600px){
     .mobile-block{
       margin-bottom: 30px;

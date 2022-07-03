@@ -209,9 +209,6 @@ select {
   font-size: 18px;
   display: block;
   cursor: pointer;
-  position: absolute;
-  top: -50px;
-  right: 0;
-  width: 40%;
+  width: 100%;
 }
 </style>

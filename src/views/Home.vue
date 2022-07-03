@@ -83,6 +83,7 @@ export default {
 }
 .shown {
   opacity: 1;
+  visibility: visible;
 }
 .user-name {
   font-size: 18px;

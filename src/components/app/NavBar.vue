@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar orange lighten-1">
+    <nav class="navbar lighten-1 my-navbar">
         <div class="nav-wrapper">
             <div class="navbar-left">
                 <a
@@ -8,7 +8,7 @@
                 >
                     <i class="material-icons black-text">dehaze</i>
                 </a>
-                <span class="black-text">
+                <span class="black-text data-block">
                     <Data />
                 </span>
             </div>
@@ -118,6 +118,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.my-navbar{
+    background: -webkit-linear-gradient(315deg,#42d392 25%,#647eff);
+}
 .right-wrapper {
     display: flex;
     align-items: center;
@@ -163,4 +166,9 @@ export default {
         padding: 0;
     }
 }
+    @media (max-width: 375px){
+        .data-block{
+            display: none;
+        }
+    }
 </style>

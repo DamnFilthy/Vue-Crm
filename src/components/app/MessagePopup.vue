@@ -23,5 +23,6 @@ export default {
 }
 .shown {
   opacity: 1;
+  visibility: visible;
 }
 </style>

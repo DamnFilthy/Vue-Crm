@@ -32,7 +32,17 @@ export default {
 <style lang="scss">
 @import '../node_modules/materialize-css/dist/css/materialize.css';
 @import '../Templates/index.css';
+
 .message-popup {
+    visibility: hidden;
     z-index: 99999;
 }
+    @media (max-width: 475px){
+        .app-page {
+            padding: 1rem;
+        }
+        table{
+            font-size: 12px;
+        }
+    }
 </style>

@@ -4,15 +4,17 @@
   </div>
   <div v-else>
     <div class="page-title">
-      <h3>Планирование</h3>
-      <div v-if="totalIncome !== null && totalOutcome !== null">
-        <div>План по доходу: {{ totalIncome.toLocaleString('ru-RU') }} ₽</div>
-        <div>
-          Лимит по расходу: {{ totalOutcome.toLocaleString('ru-RU') }} ₽
+      <div class="mobile-flex">
+        <h3>Планирование</h3>
+        <div v-if="totalIncome !== null && totalOutcome !== null">
+          <div>План по доходу: {{ totalIncome.toLocaleString('ru-RU') }} ₽</div>
+          <div>
+            Лимит по расходу: {{ totalOutcome.toLocaleString('ru-RU') }} ₽
+          </div>
         </div>
-      </div>
-      <div v-else>
-        <LoopingRhombusesSpinner :size="50" :color="'#68de4b'" />
+        <div v-else>
+          <LoopingRhombusesSpinner :size="50" :color="'#68de4b'" />
+        </div>
       </div>
     </div>
     <div
@@ -240,17 +242,31 @@ export default {
   margin-bottom: 30px;
 }
 .collapse-block {
-  height: 0;
-  transition: 0.3s all;
+  max-height: 0;
+  transition: .7s ease-in-out;
   opacity: 0;
   visibility: hidden;
   overflow-y: hidden;
+  padding-right: 30px;
 }
 .collapse-block-open {
   overflow-y: auto;
-  height: 220px;
+  max-height: 300px;
   opacity: 1;
   visibility: visible;
+  margin-bottom: 30px;
+  &::-webkit-scrollbar {
+    padding-left: 30px;
+    width: 4px;
+    background-color: rgba(181, 181, 232, 0.75);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #3d2d84;
+  }
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+    background-color: #f9f9fd;
+  }
 }
 .collapse-btn {
   transition: 0.5s ease-in-out;
@@ -266,4 +282,11 @@ export default {
 .collapse-btn-active {
   color: #40cd40;
 }
+  @media (max-width: 600px){
+    .mobile-flex{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 </style>

@@ -188,7 +188,8 @@ export default {
     border-radius: 4px;
 }
 .shown {
-    opacity: 1;
+    opacity: 1 !important;
+    visibility: visible;
 }
 .firebase-error {
     margin-bottom: 15px;
@@ -205,9 +206,6 @@ export default {
     background-color: wheat;
     padding: 15px;
     border-radius: 4px;
-}
-.shown {
-    opacity: 1;
 }
 @media (max-width: 534px) {
     .auth-card {
